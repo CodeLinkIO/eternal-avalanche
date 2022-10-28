@@ -149,7 +149,7 @@ class Dungeon {
   async refill(value) {
     // @TODO: gas price
     return nprogress.observe(
-      this.wallet.contracts.Player.refill({ ...this.defaultOpts, value }).then(tx => tx.wait()),
+      this.wallet.contracts.Player.refill({ value }).then(tx => tx.wait()),
       this.cache.onceRefill(),
     );
   }
