@@ -12,7 +12,7 @@
     "build": "cross-env USE_BABEL=false webpack",
     "build-for-dev": "cross-env NODE_ENV=production BUILD_OUTPUT=ethernal-dev/public webpack",
     "build-dev": "cross-env NODE_ENV=development ENV=staging webpack",
-    "dev": "cross-env USE_BABEL=false webpack-dev-server --content-base static",
+    "dev": "cross-env USE_BABEL=false webpack-dev-server --content-base static --host 0.0.0.0",
     "dev:server-list": "cross-env USE_BABEL=false SERVER_LIST=http://localhost:3366 webpack-dev-server --content-base static",
     "dev-staging-contracts": "cross-env USE_BABEL=false ETH_URL=https://rpc-mumbai.matic.today CACHE_API=https://ethernal-be-alpha.herokuapp.com CONTRACTS_PATH=./contracts/staging.json webpack-dev-server --content-base static",
     "dev-prod-contracts": "cross-env USE_BABEL=false ETH_URL=https://rpc-mumbai.matic.today SERVER_LIST=https://ethernal-list.prod.tmcloud.io CONTRACTS_PATH=./contracts/production.json webpack-dev-server --content-base static",
