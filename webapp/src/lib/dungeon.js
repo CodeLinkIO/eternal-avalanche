@@ -149,7 +149,7 @@ class Dungeon {
   async refill(value) {
     // @TODO: gas price
     return nprogress.observe(
-      this.wallet.contracts.Player.refill({ ...this.defaultOpts, value }).then(tx => tx.wait()),
+      this.wallet.contracts.Player.refill({ value }).then(tx => tx.wait()),
       this.cache.onceRefill(),
     );
   }
@@ -325,10 +325,10 @@ class Dungeon {
 
   async addDelegate() {
     const gasEstimate = 4000000;
-    return this.wallet.contracts.Dungeon.addDelegate(
-      this.delegateWallet.address,
-      { ...this.defaultOpts, gasLimit: gasEstimate + 15000 }
-    );
+    return this.wallet.contracts.Dungeon.addDelegate(this.delegateWallet.address, {
+      ...this.defaultOpts,
+      gasLimit: gasEstimate + 15000,
+    });
   }
 
   async createNewCharacter(characterName, characterClass) {
@@ -336,14 +336,12 @@ class Dungeon {
     console.log('creating new character');
     return nprogress.observe(
       this.wallet.contracts.Player.createAndEnter(
-          '0x0000000000000000000000000000000000000000',
-          '0',
-          characterName,
-          characterClass,
-          await this.cache.entry(),
-          { ...this.defaultOpts }
-        )
-        .then(tx => tx.wait()),
+        '0x0000000000000000000000000000000000000000',
+        '0',
+        characterName,
+        characterClass,
+        await this.cache.entry(),
+      ).then(tx => tx.wait()),
     );
   }
 
@@ -362,19 +360,14 @@ class Dungeon {
         .filter(({ name }) => name === 'Resurrect')[0].args;
       // eslint-disable-next-line no-console
       console.log('resurrected character id', Number(newCharacterId));
-      return this.wallet
-        .tx(
-          { ...this.defaultOpts },
-          'Player',
-          'enter',
-          '0x0000000000000000000000000000000000000000',
-          newCharacterId,
-          '0',
-          characterName,
-          '0',
-          await this.cache.entry(),
-        )
-        .then(tx => tx.wait());
+      return this.wallet.contracts.Player.enter(
+        '0x0000000000000000000000000000000000000000',
+        newCharacterId,
+        '0',
+        characterName,
+        '0',
+        await this.cache.entry(),
+      ).then(tx => tx.wait());
     };
     return nprogress.observe(fn());
   }
@@ -439,9 +432,7 @@ class Dungeon {
   }
 
   async recyclingReward(gears) {
-    const cost = await this.wallet.contracts.ReadOnlyDungeon.recyclingReward(
-      gears.map(gear => gear.bytes)
-    );
+    const cost = await this.wallet.contracts.ReadOnlyDungeon.recyclingReward(gears.map(gear => gear.bytes));
     return Number(cost);
   }
 
@@ -647,9 +638,7 @@ class Dungeon {
    * @return {Promise<*>}
    */
   async claimUbf() {
-    return nprogress.observe(
-      this.ubfWallet.tx('claimUBFAsCharacter', this.character).then(tx => tx.wait()),
-    );
+    return nprogress.observe(this.ubfWallet.tx('claimUBFAsCharacter', this.character).then(tx => tx.wait()));
   }
 }
 
