@@ -41,6 +41,7 @@
     "deploy:local": "wait-on tcp:8545 && buidler --network localhost deploy --export ../webapp/contracts/development.json",
     "deploy:staging-sokol": "cross-env BACKEND_WALLET=0xC92aE171cb9AEfEbcB88cdB40ba508e81F30AE1b buidler --network sokol_dev deploy --export ../webapp/contracts/staging.json",
     "deploy:staging-matic": "cross-env BACKEND_WALLET=0xC92aE171cb9AEfEbcB88cdB40ba508e81F30AE1b buidler --network matic_dev deploy --export ../webapp/contracts/staging.json",
+    "deploy:staging-fuji": "cross-env BACKEND_WALLET=0x700285A03cEbd742E84C6dA06430e466BAd75790 buidler --network fuji_dev deploy --export ../webapp/contracts/staging.json",
     "deploy:alpha": "buidler --network alpha deploy --export ../webapp/contracts/production.json",
     "run:alpha": "cross-env BUIDLER_NETWORK=alpha node",
     "run:matic_dev": "cross-env BUIDLER_NETWORK=matic_dev node",

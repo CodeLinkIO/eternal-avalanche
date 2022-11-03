@@ -22,7 +22,7 @@ try {
 }
 
 module.exports = {
-  deploymentChainIds: ['77', '15001', '1', '2', '4', '42', '80001'],
+  deploymentChainIds: ['77', '15001', '1', '2', '4', '42', '80001', '43113'],
   solc: {
     version: '0.6.5',
     outputMetadata: true,
@@ -61,6 +61,11 @@ module.exports = {
         mnemonic,
       },
     },
+    fuji_dev: {
+      url: `https://api.avax-test.network/ext/bc/C/rpc`,
+      live: true,
+      accounts: ["0xe2d171856e0c3155c20c6a25145b36cc22d2f522acffeb2fb4b1c795204ffe57"],
+    },
   },
   namedAccounts: {
     deployer: 0,
@@ -71,6 +76,7 @@ module.exports = {
       77: 0,
       15001: 0,
       80001: 0,
+      43113: 0, //Avalanche Fuji
     },
     backendAddress: {
       default: 0, // '0xD34d8Cc238808559Ca494196CeFAEEe187eb740e', // correspond to first account in mnemonic.local
@@ -78,6 +84,7 @@ module.exports = {
       77: process.env.BACKEND_WALLET || '0xBc1979815C2B642d71636A080AcF41757C3800C7',
       15001: process.env.BACKEND_WALLET || '0xBc1979815C2B642d71636A080AcF41757C3800C7',
       80001: process.env.BACKEND_WALLET || '0xBc1979815C2B642d71636A080AcF41757C3800C7',
+      43113: process.env.BACKEND_WALLET || '0x700285A03cEbd742E84C6dA06430e466BAd75790', //Avalanche Fuji
     },
     portisAccount: '0xacD8a455006Da5C8D115b3A6E9d17a3B59361F05',
     users: 'from:2',
