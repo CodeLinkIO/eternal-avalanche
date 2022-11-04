@@ -19,6 +19,7 @@
     "dev-prod1-contracts": "cross-env USE_BABEL=false ETH_URL=https://rpc-mumbai.matic.today CACHE_API=https://ethernal-cache-1.herokuapp.com CONTRACTS_PATH=./contracts/production.json webpack-dev-server --content-base static",
     "dev-prod2-contracts": "cross-env USE_BABEL=false ETH_URL=https://rpc-mumbai.matic.today CACHE_API=https://ethernal-cache-2.herokuapp.com CONTRACTS_PATH=./contracts/production.json webpack-dev-server --content-base static",
     "dev:staging": "CONTRACTS_PATH=./contracts/staging.json ETH_URL=https://rpc-mumbai.matic.today cross-env USE_BABEL=false webpack-dev-server --content-base static",
+    "dev:fuji": "CONTRACTS_PATH=./contracts/staging.json ETH_URL=https://api.avax-test.network/ext/bc/C/rpc cross-env USE_BABEL=false webpack-dev-server --content-base static --host 0.0.0.0",
     "dev:prod": "CONTRACTS_PATH=./contracts/production.json ETH_URL=https://sokol.poa.network cross-env USE_BABEL=false webpack-dev-server --content-base static",
     "deploy:staging": "ENV=staging APP=ethernal-app-alpha sh bin/deploy-heroku.sh",
     "deploy:prod@staging": "ENV=prod APP=ethernal-app-alpha sh bin/deploy-heroku.sh",

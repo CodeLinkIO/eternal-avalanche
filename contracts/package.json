@@ -41,16 +41,21 @@
     "deploy:local": "wait-on tcp:8545 && buidler --network localhost deploy --export ../webapp/contracts/development.json",
     "deploy:staging-sokol": "cross-env BACKEND_WALLET=0xC92aE171cb9AEfEbcB88cdB40ba508e81F30AE1b buidler --network sokol_dev deploy --export ../webapp/contracts/staging.json",
     "deploy:staging-matic": "cross-env BACKEND_WALLET=0xC92aE171cb9AEfEbcB88cdB40ba508e81F30AE1b buidler --network matic_dev deploy --export ../webapp/contracts/staging.json",
-    "deploy:staging-fuji": "cross-env BACKEND_WALLET=0x700285A03cEbd742E84C6dA06430e466BAd75790 buidler --network fuji_dev deploy --export ../webapp/contracts/staging.json",
+    "deploy:staging-fuji": "cross-env BACKEND_WALLET=0x0d83075fd78bF0989E8B0b4Cc399A66C7899037C buidler --network fuji_dev deploy --export ../webapp/contracts/staging.json",
     "deploy:alpha": "buidler --network alpha deploy --export ../webapp/contracts/production.json",
     "run:alpha": "cross-env BUIDLER_NETWORK=alpha node",
     "run:matic_dev": "cross-env BUIDLER_NETWORK=matic_dev node",
+    "run:fuji_dev": "cross-env BUIDLER_NETWORK=fuji_dev node",
     "run:local": "cross-env BUIDLER_NETWORK=localhost node",
     "walker:staging": "cross-env BUIDLER_NETWORK=matic_dev node scripts/walker.js",
     "walker": "cross-env BUIDLER_NETWORK=localhost node scripts/walker.js",
     "dev": "run-p -l ganache deploy:local",
+    "fuji": "run-p -l ganache deploy:staging-fuji",
     "buidler-dev": "buidler node --export ../webapp/contracts/development.json",
     "dev:quick": "run-p -l ganache-quick deploy:local",
     "dev:walker": "EXPLORE=100 run-p -l ganache-quick deploy:local"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3"
   }
 }

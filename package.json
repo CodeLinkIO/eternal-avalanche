@@ -11,8 +11,12 @@
     "install:backend": "cd backend && npm install",
     "install:webapp": "cd webapp && npm install",
     "contracts": "cd contracts && npm run dev",
+    "contracts:fuji": "cd contracts && npm run fuji",
+    "contracts_deploy:fuji": "cd contracts && npm run deploy:staging-fuji",
     "backend": "wait-on file:webapp/contracts/development.json && cd backend && npm run dev",
+    "backend:fuji": "wait-on file:webapp/contracts/development.json && cd backend && npm run dev:fuji",
     "webapp": "wait-on tcp:3399 && cd webapp && npm run dev",
+    "webapp:fuji": "wait-on tcp:3399 && cd webapp && npm run dev:fuji",
     "dev": "rm webapp/contracts/development.json & run-p -l contracts backend webapp",
     "install": "run-p -l install:contracts install:backend install:webapp",
     "start": "run-s install dev"

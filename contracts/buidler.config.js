@@ -1,5 +1,6 @@
 usePlugin('buidler-ethers-v5');
 usePlugin('buidler-deploy');
+require('dotenv').config();
 
 const fs = require('fs');
 const ethers = require('ethers');
@@ -64,7 +65,7 @@ module.exports = {
     fuji_dev: {
       url: `https://api.avax-test.network/ext/bc/C/rpc`,
       live: true,
-      accounts: ["0xe2d171856e0c3155c20c6a25145b36cc22d2f522acffeb2fb4b1c795204ffe57"],
+      accounts: [process.env.FUJI_KEY],
     },
   },
   namedAccounts: {
@@ -84,7 +85,7 @@ module.exports = {
       77: process.env.BACKEND_WALLET || '0xBc1979815C2B642d71636A080AcF41757C3800C7',
       15001: process.env.BACKEND_WALLET || '0xBc1979815C2B642d71636A080AcF41757C3800C7',
       80001: process.env.BACKEND_WALLET || '0xBc1979815C2B642d71636A080AcF41757C3800C7',
-      43113: process.env.BACKEND_WALLET || '0x700285A03cEbd742E84C6dA06430e466BAd75790', //Avalanche Fuji
+      43113: process.env.BACKEND_WALLET || '0x0d83075fd78bF0989E8B0b4Cc399A66C7899037C', //Avalanche Fuji
     },
     portisAccount: '0xacD8a455006Da5C8D115b3A6E9d17a3B59361F05',
     users: 'from:2',
