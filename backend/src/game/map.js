@@ -91,7 +91,7 @@ class DungeonMap extends DungeonComponent {
     }
   }
 
-  handleSubscribeRooms(character, {coordinates = []}) {
+  handleSubscribeRooms(character, { coordinates = [] }) {
     return coordinates
       .map(coords => this.rooms[coords])
       .map(cleanRoom)
@@ -183,11 +183,11 @@ class DungeonMap extends DungeonComponent {
   async fetchAllRooms(fromBlock = 0, toBlock = 'latest', snapshot) {
     if (snapshot) {
       console.log('getting discovered rooms after snapshot');
-      this.rooms = {...this.rooms, ...snapshot.rooms};
+      this.rooms = { ...this.rooms, ...snapshot.rooms };
     } else {
       console.log('getting all discovered rooms');
     }
-    let rooms = await pastEvents('Dungeon', 'RoomDiscovered', [], fromBlock, toBlock, 80000, true);
+    let rooms = await pastEvents('Dungeon', 'RoomDiscovered', [], fromBlock, toBlock, 2048, true);
     const progress = new Progress('rooms fetched', 100);
     console.log(`fetching info about ${rooms.length} rooms`);
     rooms = await Promise.map(
@@ -306,14 +306,14 @@ class DungeonMap extends DungeonComponent {
   async fetchCharacterMovements(fromBlock = 0, toBlock = 'latest', snapshot) {
     if (snapshot) {
       console.log('getting character movements since snapshot');
-      this.moves = {...this.moves, ...snapshot.moves};
+      this.moves = { ...this.moves, ...snapshot.moves };
     } else {
       console.log('getting character movement history');
     }
-    const moves = await pastEvents('Dungeon', 'CharacterMoved', [], fromBlock, toBlock, 40000, true);
+    const moves = await pastEvents('Dungeon', 'CharacterMoved', [], fromBlock, toBlock, 2048, true);
     const characters = new Set();
     const coordinates = new Set();
-    moves.forEach(({ args: {oldLocation, newLocation, mode, characterId, path}, blockNumber }) => {
+    moves.forEach(({ args: { oldLocation, newLocation, mode, characterId, path }, blockNumber }) => {
       const character = characterId.toString();
       characters.add(character);
       const from = locationToCoordinates(oldLocation);
@@ -323,10 +323,12 @@ class DungeonMap extends DungeonComponent {
     });
     console.log(`fetched ${moves.length} moves from ${characters.size} players in ${coordinates.size} rooms`);
     if (snapshot) {
-      Object.values(this.rooms).filter(({overrides}) => overrides).forEach(room => {
-        room.overrides = null;
-        coordinates.add(room.coordinates);
-      })
+      Object.values(this.rooms)
+        .filter(({ overrides }) => overrides)
+        .forEach(room => {
+          room.overrides = null;
+          coordinates.add(room.coordinates);
+        });
       const locations = [...coordinates].map(coord => coordinatesToLocation(coord));
       const players = [...characters].map(character => this.dungeon.characters[character].player);
       const owners = new Set([...locations, ...characters, ...players, this.contracts.Dungeon.address.toLowerCase()]);
@@ -335,7 +337,9 @@ class DungeonMap extends DungeonComponent {
       console.log(`refreshing state of recently changed ${coordinates.size} rooms`);
       await Promise.map(coordinates, coords => this.reloadRoom(coords), { concurrency });
       console.log(`refreshing state of recently moved ${characters.size} characters`);
-      await Promise.map(characters, character => this.dungeon.character.reloadCharacterInfo(character), { concurrency });
+      await Promise.map(characters, character => this.dungeon.character.reloadCharacterInfo(character), {
+        concurrency,
+      });
     }
   }
 
@@ -369,7 +373,9 @@ class DungeonMap extends DungeonComponent {
     if (room && room.deadCharacters) {
       return room.deadCharacters
         .map(character => {
-          const { characterName, stats, gear, coins, keys, fragments, elements } = this.dungeon.character.info(character);
+          const { characterName, stats, gear, coins, keys, fragments, elements } = this.dungeon.character.info(
+            character,
+          );
           if (gear.length > 0 || coins > 0 || keys > 0 || fragments > 0 || elements.reduce((acc, el) => acc + el) > 0) {
             return { character, characterName, stats, gear, coins, keys, fragments, elements };
           } else {
@@ -515,8 +521,9 @@ class DungeonMap extends DungeonComponent {
   }
 
   roomsByDistance(origin = '0,0', limit = 100) {
-    return Object.values(bfs(this.rooms, origin, null, limit, true, true))
-      .sort((a, b) => a.parent.distance - b.parent.distance);
+    return Object.values(bfs(this.rooms, origin, null, limit, true, true)).sort(
+      (a, b) => a.parent.distance - b.parent.distance,
+    );
   }
 
   roomsWith(filter) {
@@ -524,8 +531,7 @@ class DungeonMap extends DungeonComponent {
   }
 
   viewport(floor = 0) {
-    const rooms = Object.keys(this.rooms)
-      .filter(coords => (coords.split(',').map(Number)[2] || 0 === Number(floor)));
+    const rooms = Object.keys(this.rooms).filter(coords => coords.split(',').map(Number)[2] || 0 === Number(floor));
     const viewport = rooms.reduce(
       (prev, key) => {
         const [x, y] = key.split(',').map(Number);

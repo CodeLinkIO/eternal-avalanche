@@ -52,13 +52,13 @@ class Keeper extends DungeonComponent {
     justValues(await pastEvents('Rooms', 'DataUpdate', [], fromBlock, toBlock))
       .forEach(({ id, data }) => this.handleDataUpdate(id, data, null, true));
     console.log('getting room transactions');
-    justValues(await pastEvents('Rooms', 'Transfer', [], fromBlock, toBlock, 80000, true))
+    justValues(await pastEvents('Rooms', 'Transfer', [], fromBlock, toBlock, 2048, true))
       .forEach(({ from, to, id }) => this.handleTransfer(from, to, id));
     console.log('getting room sub-transactions');
-    justValues(await pastEvents('Rooms', 'SubTransfer', [], fromBlock, toBlock, 80000, true))
+    justValues(await pastEvents('Rooms', 'SubTransfer', [], fromBlock, toBlock, 2048, true))
       .forEach(({ from, to, id }) => this.handleSubTransfer(from, to, id));
     console.log('getting room income');
-    justValues(await pastEvents('Dungeon', 'RoomIncome', [], fromBlock, toBlock, 40000, true))
+    justValues(await pastEvents('Dungeon', 'RoomIncome', [], fromBlock, toBlock, 2048, true))
       .forEach(values => this.handleRoomIncome(...values));
     console.log('getting custom room names');
     justValues(await pastEvents('Dungeon', 'RoomName', [], fromBlock, toBlock))

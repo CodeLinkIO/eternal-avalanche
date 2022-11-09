@@ -136,35 +136,41 @@ const contracts = async () => {
   return _contracts;
 };
 
+const getChunks = async ({ fromBlock, toBlock, blockChunk }) => {
+  const chunks = [];
+  const from = fromBlock;
+  const to = toBlock === 'latest' ? (await provider.getBlock('latest')).number : toBlock;
+  const isExceedBlockLimit = to - from > blockChunk;
+  if (isExceedBlockLimit) {
+    let block = from;
+    while (block + blockChunk < to) {
+      chunks.push({ fromBlock: block, toBlock: (block += blockChunk) });
+      block++;
+    }
+    if (block < to) {
+      chunks.push({ fromBlock: block, toBlock });
+    }
+  } else {
+    chunks.push({ fromBlock: from, toBlock: to });
+  }
+  return chunks;
+};
+
 const pastEvents = async (
   contractName,
   eventName,
   additionalTopics = [],
   fromBlock = 0,
   toBlock = 'latest',
-  blockChunk = 100000,
+  blockChunk = 2048,
   showProgress = false,
 ) => {
   const contract = _contracts[contractName];
   const eventTopic = contract.interface.getEventTopic(eventName);
   const topics = [eventTopic, ...additionalTopics];
-  let chunks = [{ fromBlock, toBlock }];
-  if (fromBlock) {
-    const from = fromBlock;
-    const to = toBlock === 'latest' ? (await provider.getBlock('latest')).number : toBlock;
-    if (to - from > blockChunk) {
-      chunks = [];
-      let block = from;
-      while (block + blockChunk < to) {
-        chunks.push({ fromBlock: block, toBlock: (block += blockChunk) });
-        block++;
-      }
-      if (block < to) {
-        chunks.push({ fromBlock: block, toBlock });
-      }
-    }
-  }
+  const chunks = await getChunks({ fromBlock, toBlock, blockChunk });
   const progress = new Progress('event chunks', 1);
+
   return Promise.map(
     chunks,
     ({ fromBlock, toBlock }) =>
