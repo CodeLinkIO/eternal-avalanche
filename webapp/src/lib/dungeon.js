@@ -81,7 +81,7 @@ class Dungeon {
       delegateWallet: this.delegateWallet,
     });
 
-    const chainId = await this.provider.send('eth_chainId', []);
+    const chainId = process.env.CHAIN_ID//await this.provider.send('eth_chainId', []);
     const gasPrice = ethers.BigNumber.from(config(chainId).gasPrice);
     this.defaultOpts = {
       gas: 4000000,
