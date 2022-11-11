@@ -17,6 +17,7 @@ const { bn } = require('../game/utils.js');
 const retryConfig = { retries: 3 };
 const concurrency = process.env.CONCURRENCY || 20;
 const url = process.env.ETH_URL || 'http://localhost:8545';
+const chainId = process.env.CHAIN_ID
 const mnemonic = process.env.MNEMONIC;
 const oldMnemonic = process.env.OLD_MNEMONIC;
 
@@ -39,9 +40,10 @@ const setupAuthorization = async ({ DungeonAdmin }) => {
     if (oldMnemonic) {
       const oldWallet = BackendWallet.fromMnemonic(oldMnemonic).connect(provider);
       console.log('changing backend wallet from ' + backendAddress);
+      console.log(oldWallet)
       const tx = await new ethers.Contract(
         DungeonAdmin.address,
-        DungeonAdmin.interface.abi,
+        DungeonAdmin.interface, //Was .interface.abi, but there was no abi key. This wasn't a problem before.
         oldWallet,
       ).setDungeonAndBackend(dungeonAddress, wallet.address);
       await tx.wait();
@@ -87,7 +89,7 @@ const setupPureContract = async deploymentBytecode => {
 };
 
 const loadContracts = async () => {
-  const chainId = bn(await provider.send('eth_chainId', [])).toString();
+  //const chainId = bn(await provider.send('eth_chainId', [])).toString(); //Old call method. Replaced with .env
   console.log(`loading contracts on network ${chainId}`);
   let chainInfo = contractsInfo[chainId];
   if (!chainInfo) {
@@ -125,6 +127,7 @@ const loadContracts = async () => {
       pureCall: await setupPureContract(chainContracts.Dungeon.linkedData.readOnlyDungeon),
     },
   );
+  console.log(contracts["Dungeon"])
   await setupAuthorization(contracts);
   return contracts;
 };

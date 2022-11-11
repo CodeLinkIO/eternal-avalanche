@@ -2,10 +2,11 @@ const qrcode = require('qrcode');
 const {Wallet, BigNumber} = require('ethers');
 const fs = require('fs');
 const webappConfig = require('../../webapp/src/data/config');
+require('dotenv').config()
 
 module.exports = async ({network, getChainId, getNamedAccounts, deployments}) => {
   const {execute, deployIfDifferent, log} = deployments;
-  const chainId = await getChainId();
+  const chainId = process.env.CHAIN_ID; //await getChainId(); //Old method replaced with env.
   const config = webappConfig(chainId); // TODO contract expose min balance / price
   const gasPrice = BigNumber.from(config.gasPrice); // 1000000000
   const gas = 6000000;

@@ -63,7 +63,7 @@ module.exports = {
       },
     },
     fuji_dev: {
-      url: `https://api.avax-test.network/ext/bc/C/rpc`,
+      url: `https://patient-yolo-wave.avalanche-testnet.discover.quiknode.pro/896a4076ea14a0f32ac6c99ff1488cec1672bb2b/ext/bc/C/rpc`,
       live: true,
       accounts: [process.env.FUJI_KEY],
     },

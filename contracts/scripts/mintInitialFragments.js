@@ -1,5 +1,6 @@
 const {ethers, getChainId} = require('@nomiclabs/buidler');
 const {assert} = require('chai');
+require('dotenv').config()
 
 const TOKEN_ID = 8;
 
@@ -14,7 +15,7 @@ async function main() {
   if (players.length !== amounts.length) {
     throw new Error('number of players and amounts is not consistent');
   }
-  console.log('chain id', await getChainId());
+  console.log('chain id', process.env.CHAIN_ID);
   console.log('elements address', elements.address);
   if (Number(await elements.balanceOf(players[0], TOKEN_ID)) !== 0) {
     throw new Error('player already has fragments!');

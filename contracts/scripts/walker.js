@@ -2,6 +2,7 @@ const {enter, walk} = require('../lib');
 const {BigNumber} = require('ethers');
 const webappConfig = require('../../webapp/src/data/config');
 const {ethers, deployments, getNamedAccounts, getChainId} = require('@nomiclabs/buidler');
+require("dotenv").config()
 
 const walker = async () => {
   const dungeonAdmin = await ethers.getContract('DungeonAdmin');
@@ -12,7 +13,7 @@ const walker = async () => {
     throw new Error('unauthorized ' + deployer + ', expected ' + backendAddress);
   }
   console.log('using address ' + deployer);
-  const chainId = await getChainId();
+  const chainId = process.env.CHAIN_ID; //await getChainId(); //Old method replaced with env.
   const config = webappConfig(chainId);
   const gasPrice = BigNumber.from(config.gasPrice);
   const explore = Number(process.env.EXPLORE);

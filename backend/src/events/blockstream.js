@@ -6,8 +6,8 @@ const retryConfig = { retries: 3 };
 
 class Blockstream extends Events {
   defaultConfig = {
-    poolingInterval: 1000,
-    blockRetention: 1000,
+    poolingInterval: 2500,
+    blockRetention: 5000,
     start: true,
   };
 

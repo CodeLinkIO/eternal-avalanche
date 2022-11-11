@@ -1,9 +1,10 @@
 const {enter, walk} = require('../lib');
 const {BigNumber} = require('ethers');
 const webappConfig = require('../../webapp/src/data/config');
+require('dotenv').config()
 
 module.exports = async ({getNamedAccounts, getChainId}) => {
-  const chainId = await getChainId();
+  const chainId = process.env.CHAIN_ID; //await getChainId(); //Old method replaced with env.
   const config = webappConfig(chainId);
   const gasPrice = BigNumber.from(config.gasPrice);
   const explore = Number(process.env.EXPLORE);

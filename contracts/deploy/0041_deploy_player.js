@@ -1,6 +1,8 @@
 const webappConfig = require('../../webapp/src/data/config');
+require('dotenv').config()
+
 module.exports = async ({ethers, deployments, getChainId, network, getNamedAccounts}) => {
-  const chainId = await getChainId();
+  const chainId = process.env.CHAIN_ID; //await getChainId(); //Old method replaced with env.
   const config = webappConfig(chainId); // TODO contract expose min balance / price
   const dev_forceMine = !network.live;
   const {deploy} = deployments;
