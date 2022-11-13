@@ -2,6 +2,24 @@
   "name": "fuji_dev",
   "chainId": "43113",
   "contracts": {
+    "Batch": {
+      "address": "0xcD0D1469aA4a80CbC17449421CEDE42D89746ca1",
+      "abi": [
+        {
+          "inputs": [
+            {
+              "internalType": "address payable[]",
+              "name": "to",
+              "type": "address[]"
+            }
+          ],
+          "name": "transfer",
+          "outputs": [],
+          "stateMutability": "payable",
+          "type": "function"
+        }
+      ]
+    },
     "BlockHashRegister": {
       "address": "0xC30dBc30fF22c47EF79429607Ec415aA94e5d436",
       "abi": [

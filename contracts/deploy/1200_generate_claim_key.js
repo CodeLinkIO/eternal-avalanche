@@ -11,7 +11,7 @@ module.exports = async ({network, getChainId, getNamedAccounts, deployments}) =>
   const gasPrice = BigNumber.from(config.gasPrice); // 1000000000
   const gas = 6000000;
 
-  if (network.live && !process.env.GENERATE_KEYS) {
+  if (network.live && process.env.GENERATE_KEYS === "0") {
     log('skip deployment chain, require manual intervention');
     return;
   }
@@ -21,14 +21,12 @@ module.exports = async ({network, getChainId, getNamedAccounts, deployments}) =>
   let mnemonic = 'poet state twin chunk pottery boss final sudden matter express nasty control'; // keep old claimKey for local
   if (network.live) {
     offset = 3200;
-    mnemonic = 'wild cement you coffee payment answer kitten garden imitate label critic company';
+    mnemonic = process.env.MNEMONIC;
   }
 
   const {deployer} = await getNamedAccounts();
-  let numClaimKey = 200;
-  if (!network.live) {
-    numClaimKey = 5;
-  }
+  let numClaimKey = parseInt(process.env.KEYS_TO_GENERATE);
+
   const random = false; // false
   const claimKeys = [];
   const price = BigNumber.from(config.price);
