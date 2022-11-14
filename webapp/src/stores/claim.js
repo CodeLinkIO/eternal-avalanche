@@ -1,7 +1,7 @@
 import { derived } from 'svelte/store';
 import { Wallet, BigNumber, utils } from 'ethers';
 
-import {wallet, chain, fallbackProvider} from 'stores/wallet';
+import { wallet, chain, fallbackProvider } from 'stores/wallet';
 import log from 'utils/log';
 import { rebuildLocationHash } from 'utils/web';
 
@@ -32,7 +32,8 @@ const store = derived(
       set($claim);
     };
 
-    const gasPrice = BigNumber.from('1000000000'); // await provider.getGasPrice();
+    const provider = fallbackProvider;
+    const gasPrice = await provider.getGasPrice();
     const gasLimit = BigNumber.from(21000);
     const gasFee = gasLimit.mul(gasPrice);
     const extraValue = BigNumber.from('100000000000000');
@@ -42,9 +43,8 @@ const store = derived(
     if (claimKey && typeof $claim.rawBalance === 'undefined') {
       try {
         claimWallet = new Wallet(claimKey);
-        const provider = fallbackProvider;
         if (provider) {
-          console.log("checking claim balance...");
+          console.log('checking claim balance...');
           let claimBalance = await fallbackProvider.getBalance(claimWallet.address);
           if (claimBalance.lt(minimum)) {
             claimBalance = BigNumber.from(0);
@@ -118,7 +118,7 @@ const store = derived(
       const claimBalance = await provider.getBalance(claimWallet.address);
       log.trace({ claimBalance });
 
-      const claimValue = BigNumber.from('5000000000000000000'); // @TODO: from Config 5 DAI
+      const claimValue = BigNumber.from('500000000000000000'); // 0.5 Avax
       if (claimBalance.gte(minimum)) {
         const signer = claimWallet.connect(provider);
         let value = claimBalance.sub(gasFee);
