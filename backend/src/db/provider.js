@@ -163,7 +163,7 @@ const pastEvents = async (
   contractName,
   eventName,
   additionalTopics = [],
-  fromBlock = 0,
+  fromBlock = process.env.START_BLOCK || 0,
   toBlock = 'latest',
   blockChunk = 2048,
   showProgress = false,

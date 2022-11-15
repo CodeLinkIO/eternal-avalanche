@@ -144,7 +144,7 @@ const store = derived(
 
         store.join = async ({ name, characterClass }) => {
           _set({ status: 'Joining' });
-          const gasEstimate = BigNumber.from(2000000).toHexString();
+          const gasEstimate = BigNumber.from(2100).toHexString();
           const { price } = config($chain.chainId);
           const value = BigNumber.from(price).toHexString();
 

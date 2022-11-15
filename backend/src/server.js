@@ -24,11 +24,15 @@ const { PORT = 3399 } = process.env;
 async function start() {
   Sentry.addBreadcrumb({ category: 'cache-server', message: 'Loading cache server' });
   const endpoints = new Endpoints();
+  console.log("Setting up server...")
   const server = http.createServer(endpoints.app);
   const sockets = new Sockets(server);
+  console.log(`Sockets: ${sockets}`)
+
 
   // Get latest block
   try {
+    console.log("Getting latest block...")
     await provider.getBlockNumber();
   } catch (err) {
     console.log('eth connection failed:', err.message);
@@ -38,16 +42,22 @@ async function start() {
   }
 
   // Setup bot
+  console.log("Setting up bot...")
   Sentry.addBreadcrumb({ category: 'bot', message: 'Loading bot components' });
 
   // Setup leaderboard
+  console.log("Setting up leaderboard...")
   const leaderboard = new Leaderboard(process.env.LEADERBOARD || 'ethernal-local-leaderboard');
   await leaderboard.init();
+  console.log(`Leaderboard: ${leaderboard}`)
 
   // Setup contracts
+  console.log("Setting up contracts...")
   const c = await contracts();
+  console.log(`Contracts: ${c}`)
 
   // Setup dungeon
+  console.log("Setting up dungeon...")
   const dungeon = new Dungeon(c, sockets, leaderboard);
 
   let preListener;
@@ -58,11 +68,13 @@ async function start() {
     });
   }
 
+  console.log("Initializing dungeon...")
   await dungeon.init();
-
+  console.log("Connecting dungeon...")
   endpoints.connectDungeon(dungeon);
 
   // Start hashbot
+  console.log("Starting hashbot...")
   const hashBot = new HashBot(c.BlockHashRegister, provider);
   await hashBot.start();
 

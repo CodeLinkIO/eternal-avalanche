@@ -6,7 +6,6 @@ const { fromMnemonic } = utils.HDNode;
 class BackendWallet extends Wallet {
   constructor(...args) {
     super(...args);
-    this._noncePromise = null;
   }
 
   connect(provider) {
@@ -20,11 +19,12 @@ class BackendWallet extends Wallet {
       transaction.gasPrice = BigNumber.from(process.env.GAS_PRICE || '1000000000');
     }
     if (transaction.nonce == null) {
-      if (this._noncePromise == null) {
-        this._noncePromise = this.provider.getTransactionCount(this.address);
+      try {
+        transaction.nonce = this.provider.getTransactionCount(this.address);
+        transaction.nonce.then(nonce => transaction.nonce = nonce);
+      } catch (err) {
+        throw `There was an error while getting the transaction count.\n${err}`
       }
-      transaction.nonce = this._noncePromise;
-      this._noncePromise = this._noncePromise.then(nonce => nonce + 1);
     }
 
     const tx = await retry(async () => {
@@ -32,10 +32,11 @@ class BackendWallet extends Wallet {
       try {
         tx = await super.sendTransaction(transaction);
       } catch (err) {
+        //This is not the correct way. A proper error message will always contain "nonce".
         if (err.message.includes('nonce')) {
-          console.log('incorrect nonce, trying again');
+          let err_arr = err.message.split(",") 
+          console.log(`Error. Trying again.${err_arr[err_arr.length - 2]} ${process.env.GAS_PRICE}`);
           transaction.nonce = await this.provider.getTransactionCount(this.address);
-          this._noncePromise = null;
           tx = await super.sendTransaction(transaction);
         } else {
           throw err;
