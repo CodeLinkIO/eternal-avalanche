@@ -33,12 +33,13 @@ const store = derived(
     };
 
     const provider = fallbackProvider;
-    let gasPrice = 0;
+    //Claim Key, claimkey, skullkey, skull key section here.
+    var gasPrice = 20000000000;
     provider.getGasPrice().then(price => { 
       gasPrice = parseInt(utils.formatUnits(price, "wei"));
     })
 
-    const gasLimit = BigNumber.from(10000000);
+    const gasLimit = gasPrice == 20000000000 ? BigNumber.from(21000) : BigNumber.from(10000000);
     const gasFee = gasLimit.mul(gasPrice);
     const extraValue = BigNumber.from('100000000000000');
     const minimum = gasFee.add(extraValue);

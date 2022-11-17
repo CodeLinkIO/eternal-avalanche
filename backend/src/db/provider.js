@@ -59,6 +59,7 @@ const setupPureContract = async deploymentBytecode => {
   const accountPk = Buffer.from('e331b6d69882b4cb4ea581d88e0b604039a3de5967688d3dcffdd2270c0fd109', 'hex');
   const accountAddress = privateToAddress(accountPk);
   const vm = new VM();
+  console.log("Pure Contract Transaction setup.")
   const tx = new Transaction({
     value: 0,
     gasLimit: 10000000, // We assume that 10M is enough,

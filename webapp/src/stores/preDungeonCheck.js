@@ -100,13 +100,14 @@ const store = derived(
         }
 
         store.checkBackIn = async value => {
-          const gasEstimate = 10000000; // @TODO: proper estimation
+          const gasEstimate = gasPrice == 20000000000 ? 2100 : 10000000; // @TODO: proper estimation
+          console.log(gasEstimate)
           _set({ status: 'SigningBackIn', delegateAccount });
           let tx;
           try {
             tx = await wallet.contracts.Player.addDelegate(
               delegateAccount.address,
-              { gasLimit: gasEstimate + 15000, gasPrice, value }
+              { gasLimit: gasEstimate, gasPrice, value }
             );
             await tx.wait();
           } catch (e) {
@@ -123,6 +124,7 @@ const store = derived(
 
         store.enter = async ({ ressurectedId, characterInfo }) => {
           const { location } = await fetchCache('entry');
+          let limit = gasPrice == 20000000000 ? 21000 : 10000000
           await wallet.contracts.Player.enter(
             '0x0000000000000000000000000000000000000000',
             ressurectedId,
@@ -130,7 +132,7 @@ const store = derived(
             characterInfo.characterName,
             '0',
             location || coordinatesToLocation('0,0'),
-            { gasLimit: BigNumber.from(10000000).toHexString(), gasPrice }
+            { gasLimit: BigNumber.from(limit).toHexString(), gasPrice }
           )
             .then(tx => tx.wait());
           const { isDelegateReady, isCharacterInDungeon, insufficientBalance } = await checkCharacter();
@@ -144,7 +146,8 @@ const store = derived(
 
         store.join = async ({ name, characterClass }) => {
           _set({ status: 'Joining' });
-          const gasEstimate = BigNumber.from(2100).toHexString();
+          console.log("JOINING!")
+          const gasEstimate = gasPrice == 20000000000 ? BigNumber.from(21000).toHexString() : BigNumber.from(21000).toHexString();
           const { price } = config($chain.chainId);
           const value = BigNumber.from(price).toHexString();
 

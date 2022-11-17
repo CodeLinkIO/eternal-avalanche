@@ -49,7 +49,7 @@ class HashBot {
 
       let tx;
       try {
-        tx = await this.register.save({ gasLimit: '10000000', gasPrice: this.price});
+        tx = await this.register.save({ gasLimit: process.env.GAS_LIMIT, gasPrice: this.price});
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error(

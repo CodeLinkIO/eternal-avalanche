@@ -1,8 +1,9 @@
 const { coordinatesToLocation } = require('./utils');
 const { cleanRoom, gearById } = require('../data/utils');
 const DungeonComponent = require('./dungeonComponent.js');
+require("dotenv").config()
 
-const opts = { gasLimit: 10000000 };
+const opts = { gasLimit: parseInt(process.env.GAS_LIMIT) };
 
 class Cheats extends DungeonComponent {
   constructor(dungeon) {

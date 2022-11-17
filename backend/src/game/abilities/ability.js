@@ -1,6 +1,6 @@
 const { bn } = require('../utils');
 const { balanceToAmounts } = require('../../data/utils');
-
+require("dotenv").config()
 class Ability {
   price = { fragments: 2 };
   requirements = {
@@ -38,7 +38,7 @@ class Ability {
         bn(location),
         bn(this.data),
         balanceToAmounts(this.price),
-        { gasLimit: 10000000 }
+        { gasLimit: parseInt(process.env.GAS_LIMIT) }
       );
       await tx.wait();
     } else {

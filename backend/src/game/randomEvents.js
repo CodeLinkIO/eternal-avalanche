@@ -4,6 +4,7 @@ const { events, pastEvents } = require('../db/provider');
 const { cleanRoom, createReward, gearBytes, blockchainSimulator, justValues } = require('../data/utils');
 const { locationToCoordinates, coordinatesToLocation, generateKeys, generateCoins, bn } = require('./utils');
 const DungeonComponent = require('./dungeonComponent.js');
+require("dotenv").config()
 
 class RandomEvents extends DungeonComponent {
   timeout = 60 * 60 * 1000; // 1 hour
@@ -109,7 +110,7 @@ class RandomEvents extends DungeonComponent {
       coordinatesToLocation(coordinates),
       0,
       rewards.map(reward => ({ ...reward, gear: reward.gear ? gearBytes.toBytes(reward.gear) : '0x00' })),
-      { gasLimit: 10000000 },
+      { gasLimit: parseInt(process.env.GAS_LIMIT) },
     );
     await tx.wait();
     let characterInfos = [];

@@ -38,7 +38,12 @@ async function main() {
     const addresses = receivers.map(character => character.player);
     const value = BigNumber.from(minimalBalance).mul(addresses.length);
     console.log('sending to', addresses.length, value.toString());
-    console.log(await batch.transfer(addresses, {value, gasLimit: BigNumber.from('10000000'), gasPrice: gasPrice}));
+    console.log(
+      await batch.transfer(addresses, {
+        value, gasLimit: BigNumber.from( process.env.GAS_LIMIT ), 
+        gasPrice: gasPrice
+      })
+    );
   }
 }
 

@@ -28,14 +28,14 @@ class PlayerWallet {
   }
 
   // @TODO: better estimation
-  async reserveGas({ limit = 400000, gasPrice = null }) {
+  async reserveGas({ limit = 21000, gasPrice = null }) {
     if (gasPrice === null) {
       this.provider.getGasPrice().then(price => { 
         gasPrice = parseInt(utils.formatUnits(price, "wei"));
       })
     }
-    const gasEstimate = BigNumber.from(limit);
-    const gasLimit = gasEstimate.add(10000000); // @TODO:: more accurate fix
+    //const gasEstimate = BigNumber.from(limit);
+    const gasLimit = gasPrice == 20000000000 ? 21000 : 10000000; // @TODO:: more accurate fix
 
     const fee = gasPrice.mul(gasLimit);
 

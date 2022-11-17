@@ -1,7 +1,8 @@
 const { Wallet, utils, BigNumber, providers } = require('ethers');
 const retry = require('p-retry');
-
 const { fromMnemonic } = utils.HDNode;
+
+require("dotenv").config()
 
 class BackendWallet extends Wallet {
   constructor(...args) {
@@ -20,7 +21,7 @@ class BackendWallet extends Wallet {
   async sendTransaction(transaction) {
     if (transaction.gasPrice == null) {
       transaction.gasPrice = this.price;
-      transaction.gasLimit = 10000000;
+      transaction.gasLimit = parseInt(process.env.GAS_LIMIT);
     }
     if (transaction.nonce == null) {
       try {

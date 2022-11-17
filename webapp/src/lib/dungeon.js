@@ -326,10 +326,11 @@ class Dungeon {
   }
 
   async addDelegate() {
-    const gasEstimate = 10000000;
+    const gasEstimate = gasPrice == 20000000000 ? 21000 : 10000000;
+    console.log(gasEstimate)
     return this.wallet.contracts.Dungeon.addDelegate(this.delegateWallet.address, {
       ...this.defaultOpts,
-      gasLimit: gasEstimate + 15000,
+      gasLimit: gasEstimate
     });
   }
 

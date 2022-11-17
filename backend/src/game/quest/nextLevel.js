@@ -1,6 +1,7 @@
 const Sentry = require('@sentry/node');
 const Quest = require('./quest');
 const { coordinatesToLocation, overrideFloor, parseCoordinates } = require('../utils');
+require("dotenv").config()
 
 class NextLevel extends Quest {
   floor = 0;
@@ -60,7 +61,7 @@ class NextLevel extends Quest {
     const tx = await this.dungeon.contracts.DungeonAdmin.teleportCharacter(
       this.character,
       coordinatesToLocation(overrideFloor('0,0', this.floor + 1)),
-      { gasLimit: 10000000 },
+      { gasLimit: parseInt(process.env.GAS_LIMIT) },
     );
     await tx.wait();
   }
