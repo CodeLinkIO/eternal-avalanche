@@ -1,5 +1,5 @@
 const {enter, walk} = require('../lib');
-const {BigNumber} = require('ethers');
+const {BigNumber, providers} = require('ethers');
 const webappConfig = require('../../webapp/src/data/config');
 const {ethers, deployments, getNamedAccounts, getChainId} = require('@nomiclabs/buidler');
 require("dotenv").config()
@@ -13,9 +13,10 @@ const walker = async () => {
     throw new Error('unauthorized ' + deployer + ', expected ' + backendAddress);
   }
   console.log('using address ' + deployer);
+  const provider = new providers.JsonRpcProvider(process.env.PROVIDER_ENDPOINT);
+  const gasPrice = provider.getGasPrice().then(price => { return parseInt(utils.formatUnits(price, "wei")).toString(); })
   const chainId = process.env.CHAIN_ID; //await getChainId(); //Old method replaced with env.
   const config = webappConfig(chainId);
-  const gasPrice = BigNumber.from(config.gasPrice);
   const explore = Number(process.env.EXPLORE);
   const setup = await enter(deployer, config.price, gasPrice);
   setup.opts = {gasPrice};

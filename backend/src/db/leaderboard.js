@@ -14,7 +14,13 @@ class Leaderboard {
     this.lastWeek = {};
   }
 
-  async init() {
+  async init(skip=false) {
+    if(skip == true) { 
+      this.connected = false;
+      console.log("Skipping leaderboard setup.")
+      return;
+    }
+
     try {
       await this.fetchLastWeekStats();
 

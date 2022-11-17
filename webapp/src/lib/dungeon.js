@@ -81,8 +81,10 @@ class Dungeon {
       delegateWallet: this.delegateWallet,
     });
 
-    const chainId = process.env.CHAIN_ID//await this.provider.send('eth_chainId', []);
-    const gasPrice = ethers.BigNumber.from(config(chainId).gasPrice);
+    const gasPrice = this.provider.getGasPrice().then(price => { 
+      let convertedPrice = parseInt(utils.formatUnits(price, "wei"));
+      return convertedPrice;
+    })
     this.defaultOpts = {
       gas: 4000000,
       gasPrice,
@@ -324,7 +326,7 @@ class Dungeon {
   }
 
   async addDelegate() {
-    const gasEstimate = 4000000;
+    const gasEstimate = 10000000;
     return this.wallet.contracts.Dungeon.addDelegate(this.delegateWallet.address, {
       ...this.defaultOpts,
       gasLimit: gasEstimate + 15000,

@@ -5,6 +5,8 @@ require('dotenv').config()
 const TOKEN_ID = 8;
 
 async function main() {
+  const provider = new ethers.providers.JsonRpcProvider(process.env.PROVIDER_ENDPOINT);
+  const gasPrice = provider.getGasPrice().then(price => { return parseInt(ethers.utils.formatUnits(price, "wei")).toString();})
   const admin = await ethers.getContract('DungeonAdmin');
   const elements = await ethers.getContract('Elements');
   const fragments = [
@@ -21,7 +23,7 @@ async function main() {
     throw new Error('player already has fragments!');
   }
   console.log(`minting ${amounts.reduce((a, b) => a + b)} fragments for ${players.length} players`);
-  const tx = await admin.batchMineVaultElements(TOKEN_ID, players, amounts, {gasPrice: '1000000000'});
+  const tx = await admin.batchMineVaultElements(TOKEN_ID, players, amounts, {gasPrice: gasPrice});
   console.log(tx.hash);
   await tx.wait();
   console.log('checking');

@@ -1,8 +1,10 @@
-const { BigNumber } = require('ethers');
+const { BigNumber, utils } = require('ethers');
 const Sentry = require('@sentry/node');
+require('dotenv').config()
 
 class HashBot {
   constructor(register, provider) {
+    provider.getGasPrice().then(price => {this.price = parseInt(utils.formatUnits(price, "wei")).toString();})
     this.register = register;
     this.provider = provider;
   }
@@ -47,7 +49,7 @@ class HashBot {
 
       let tx;
       try {
-        tx = await this.register.save({ gasLimit: '200000', gasPrice: process.env.GAS_PRICE || '1000000000' });
+        tx = await this.register.save({ gasLimit: '10000000', gasPrice: this.price});
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error(

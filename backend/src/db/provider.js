@@ -16,13 +16,13 @@ const { bn } = require('../game/utils.js');
 
 const retryConfig = { retries: 3 };
 const concurrency = process.env.CONCURRENCY || 20;
-const url = process.env.ETH_URL || 'http://localhost:8545';
+const providerUrl = process.env.PROVIDER_ENDPOINT || 'http://localhost:8545';
 const chainId = process.env.CHAIN_ID
 const mnemonic = process.env.MNEMONIC;
 const oldMnemonic = process.env.OLD_MNEMONIC;
 
-console.log('connecting to provider ' + url);
-const provider = new ethers.providers.JsonRpcProvider(url);
+console.log('connecting to provider ' + providerUrl);
+const provider = new ethers.providers.JsonRpcProvider(providerUrl);
 let wallet;
 let hashBotWallet;
 if (mnemonic) {
@@ -127,7 +127,7 @@ const loadContracts = async () => {
       pureCall: await setupPureContract(chainContracts.Dungeon.linkedData.readOnlyDungeon),
     },
   );
-  console.log(contracts["Dungeon"])
+  console.log("Setting up autorization...")
   await setupAuthorization(contracts);
   return contracts;
 };
@@ -163,7 +163,7 @@ const pastEvents = async (
   contractName,
   eventName,
   additionalTopics = [],
-  fromBlock = process.env.START_BLOCK || 0,
+  fromBlock = parseInt(process.env.START_BLOCK) || 0,
   toBlock = 'latest',
   blockChunk = 2048,
   showProgress = false,
@@ -179,10 +179,10 @@ const pastEvents = async (
     ({ fromBlock, toBlock }) =>
       retry(async () => {
         const logs = await provider.getLogs({
-          fromBlock,
-          toBlock,
-          address: contract.address,
-          topics,
+          fromBlock: fromBlock,
+          toBlock: toBlock,
+          address: contract.address.toString(),
+          topics: topics.toString().split(","),
         });
         if (showProgress) {
           progress.tick();
@@ -194,7 +194,7 @@ const pastEvents = async (
 };
 
 const events =
-  url.includes('rpc-mumbai.matic.today') && process.env.DAGGER !== 'disabled'
+  providerUrl.includes('rpc-mumbai.matic.today') && process.env.DAGGER !== 'disabled'
     ? new DaggerEvents(provider, process.env.DAGGER || 'wss://mumbai-dagger.matic.today')
     : new Blockstream(provider);
 

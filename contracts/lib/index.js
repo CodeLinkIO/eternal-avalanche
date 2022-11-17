@@ -1,6 +1,7 @@
+require('dotenv').config()
 const {deployments, getNamedAccounts, ethers} = require('@nomiclabs/buidler');
 const {assert} = require('chai');
-const {Wallet, BigNumber, Contract} = require('ethers');
+const {Wallet, BigNumber, Contract, utils, providers} = require('ethers');
 const PlayerWallet = require('../../webapp/src/lib/PlayerWallet'); // TODO better way to share code
 const {
   decodeExits,
@@ -48,7 +49,11 @@ function mergeABIEvents(abi1, abi2) {
   return result;
 }
 
-async function enter(playerAddress, config, energy = '1000000000000000000', gasPrice = BigNumber.from('1000000000')) {
+async function enter(playerAddress, config, energy = '1000000000000000000', gasPrice = null) {
+  if(gasPrice == null) {
+    let provider = new providers.JsonRpcProvider(process.env.PROVIDER_ENDPOINT);
+    provider.getGasPrice().then(price => { gasPrice = parseInt(utils.formatUnits(price, "wei")).toString(); })
+  }
   const playerDeployment = await deployments.get('Player', playerAddress);
   const dungeonDeployment = await deployments.get('Dungeon');
   const playerContract = new Contract(

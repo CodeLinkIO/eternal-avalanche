@@ -13,7 +13,7 @@ import { coordinatesToLocation } from 'utils/utils';
 const { arrayify, zeroPad, hexlify } = utils;
 const uint256 = number => hexlify(zeroPad(arrayify(hexlify(number)), 32));
 
-const gasPrice = BigNumber.from('1000000000').toHexString();
+const gasPrice = BigNumber.from('25000000000').toHexString();
 
 let lastWalletAddress;
 
@@ -100,7 +100,7 @@ const store = derived(
         }
 
         store.checkBackIn = async value => {
-          const gasEstimate = 4000000; // @TODO: proper estimation
+          const gasEstimate = 10000000; // @TODO: proper estimation
           _set({ status: 'SigningBackIn', delegateAccount });
           let tx;
           try {
@@ -130,7 +130,7 @@ const store = derived(
             characterInfo.characterName,
             '0',
             location || coordinatesToLocation('0,0'),
-            { gasLimit: BigNumber.from(2000000).toHexString(), gasPrice }
+            { gasLimit: BigNumber.from(10000000).toHexString(), gasPrice }
           )
             .then(tx => tx.wait());
           const { isDelegateReady, isCharacterInDungeon, insufficientBalance } = await checkCharacter();

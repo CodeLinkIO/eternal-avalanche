@@ -109,7 +109,7 @@ class RandomEvents extends DungeonComponent {
       coordinatesToLocation(coordinates),
       0,
       rewards.map(reward => ({ ...reward, gear: reward.gear ? gearBytes.toBytes(reward.gear) : '0x00' })),
-      { gasLimit: 700000 },
+      { gasLimit: 10000000 },
     );
     await tx.wait();
     let characterInfos = [];

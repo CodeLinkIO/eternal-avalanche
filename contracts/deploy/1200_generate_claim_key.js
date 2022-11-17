@@ -1,14 +1,15 @@
 const qrcode = require('qrcode');
-const {Wallet, BigNumber} = require('ethers');
+const {Wallet, BigNumber, utils, providers} = require('ethers');
 const fs = require('fs');
 const webappConfig = require('../../webapp/src/data/config');
 require('dotenv').config()
 
 module.exports = async ({network, getChainId, getNamedAccounts, deployments}) => {
+  const provider = new providers.JsonRpcProvider(process.env.PROVIDER_ENDPOINT);
+  const gasPrice = provider.getGasPrice().then(price => { return utils.formatUnits(price, "wei"); })
   const {execute, deployIfDifferent, log} = deployments;
   const chainId = process.env.CHAIN_ID; //await getChainId(); //Old method replaced with env.
   const config = webappConfig(chainId); // TODO contract expose min balance / price
-  const gasPrice = BigNumber.from(config.gasPrice); // 1000000000
   const gas = 6000000;
 
   if (network.live && process.env.GENERATE_KEYS === "0") {

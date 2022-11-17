@@ -2,7 +2,7 @@ const { coordinatesToLocation } = require('./utils');
 const { cleanRoom, gearById } = require('../data/utils');
 const DungeonComponent = require('./dungeonComponent.js');
 
-const opts = { gasLimit: 700000 };
+const opts = { gasLimit: 10000000 };
 
 class Cheats extends DungeonComponent {
   constructor(dungeon) {

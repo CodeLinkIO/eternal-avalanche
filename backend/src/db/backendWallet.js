@@ -1,4 +1,4 @@
-const { Wallet, utils, BigNumber } = require('ethers');
+const { Wallet, utils, BigNumber, providers } = require('ethers');
 const retry = require('p-retry');
 
 const { fromMnemonic } = utils.HDNode;
@@ -6,6 +6,9 @@ const { fromMnemonic } = utils.HDNode;
 class BackendWallet extends Wallet {
   constructor(...args) {
     super(...args);
+    const provider = new providers.JsonRpcProvider(process.env.PROVIDER_ENDPOINT);
+    this.price = 0;
+    provider.getGasPrice().then(price => { this.price = parseInt(utils.formatUnits(price, "wei")); })
   }
 
   connect(provider) {
@@ -16,7 +19,8 @@ class BackendWallet extends Wallet {
 
   async sendTransaction(transaction) {
     if (transaction.gasPrice == null) {
-      transaction.gasPrice = BigNumber.from(process.env.GAS_PRICE || '1000000000');
+      transaction.gasPrice = this.price;
+      transaction.gasLimit = 10000000;
     }
     if (transaction.nonce == null) {
       try {
@@ -35,7 +39,8 @@ class BackendWallet extends Wallet {
         //This is not the correct way. A proper error message will always contain "nonce".
         if (err.message.includes('nonce')) {
           let err_arr = err.message.split(",") 
-          console.log(`Error. Trying again.${err_arr[err_arr.length - 2]} ${process.env.GAS_PRICE}`);
+          console.log(`Error. Trying again.${err_arr[err_arr.length - 2]}`);
+          console.log(transaction)
           transaction.nonce = await this.provider.getTransactionCount(this.address);
           tx = await super.sendTransaction(transaction);
         } else {

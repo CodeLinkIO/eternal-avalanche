@@ -42,14 +42,15 @@ async function start() {
   }
 
   // Setup bot
-  console.log("Setting up bot...")
+  console.log("Setting up Sentry bot...")
   Sentry.addBreadcrumb({ category: 'bot', message: 'Loading bot components' });
 
   // Setup leaderboard
   console.log("Setting up leaderboard...")
   const leaderboard = new Leaderboard(process.env.LEADERBOARD || 'ethernal-local-leaderboard');
-  await leaderboard.init();
+  await leaderboard.init(skip=true);
   console.log(`Leaderboard: ${leaderboard}`)
+
 
   // Setup contracts
   console.log("Setting up contracts...")

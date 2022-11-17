@@ -1,15 +1,17 @@
 const {ethers, deployments, getNamedAccounts, getChainId} = require('@nomiclabs/buidler');
-const {BigNumber} = require('ethers');
+const {BigNumber, providers} = require('ethers');
 const fetch = require('node-fetch');
 const webappConfig = require('../../webapp/src/data/config');
+require('dotenv').config()
 
 const server = 'https://ethernal.prod.tmcloud.io';
 const minimalBalance = '100000000000000';
 
 async function main() {
+  const provider = new providers.JsonRpcProvider(process.env.PROVIDER_ENDPOINT);
+  const gasPrice = provider.getGasPrice().then(price => { return parseInt(utils.formatUnits(price, "wei")).toString(); })
   const {deployer} = getNamedAccounts();
   const batch = await ethers.getContract('Batch');
-
   const characters = [];
   let id = 1;
   while (true) {
@@ -36,7 +38,7 @@ async function main() {
     const addresses = receivers.map(character => character.player);
     const value = BigNumber.from(minimalBalance).mul(addresses.length);
     console.log('sending to', addresses.length, value.toString());
-    console.log(await batch.transfer(addresses, {value, gasLimit: BigNumber.from('1000000'), gasPrice: '1000000000'}));
+    console.log(await batch.transfer(addresses, {value, gasLimit: BigNumber.from('10000000'), gasPrice: gasPrice}));
   }
 }
 

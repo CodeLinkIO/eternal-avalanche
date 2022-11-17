@@ -18,7 +18,7 @@ const {
 const { generateXp, generateCoins, generateKeys, share } = require('./utils');
 const DungeonComponent = require('./dungeonComponent.js');
 
-const opts = { gasLimit: 700000 };
+const opts = { gasLimit: 10000000 };
 
 class Combat extends DungeonComponent {
   constructor(dungeon) {
@@ -296,7 +296,7 @@ class Combat extends DungeonComponent {
     const monsterId = combat.monster.id;
     const gasEstimate = await this.contracts.DungeonAdmin.estimateGas.characterDefeated(character, monsterId);
     const tx = await this.contracts.DungeonAdmin.characterDefeated(character, monsterId, {
-      gasLimit: gasEstimate.add(10000),
+      gasLimit: gasEstimate.add(10000000),
     });
     console.log('character defeated tx ' + tx.hash);
     await tx.wait();

@@ -38,7 +38,7 @@ class Ability {
         bn(location),
         bn(this.data),
         balanceToAmounts(this.price),
-        { gasLimit: 700000 }
+        { gasLimit: 10000000 }
       );
       await tx.wait();
     } else {

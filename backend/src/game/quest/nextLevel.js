@@ -60,7 +60,7 @@ class NextLevel extends Quest {
     const tx = await this.dungeon.contracts.DungeonAdmin.teleportCharacter(
       this.character,
       coordinatesToLocation(overrideFloor('0,0', this.floor + 1)),
-      { gasLimit: 700000 },
+      { gasLimit: 10000000 },
     );
     await tx.wait();
   }
