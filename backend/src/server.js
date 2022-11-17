@@ -49,13 +49,11 @@ async function start() {
   console.log("Setting up leaderboard...")
   const leaderboard = new Leaderboard(process.env.LEADERBOARD || 'ethernal-local-leaderboard');
   await leaderboard.init(skip=true);
-  console.log(`Leaderboard: ${leaderboard}`)
 
 
   // Setup contracts
   console.log("Setting up contracts...")
   const c = await contracts();
-  console.log(`Contracts: ${c}`)
 
   // Setup dungeon
   console.log("Setting up dungeon...")

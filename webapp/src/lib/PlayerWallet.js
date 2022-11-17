@@ -30,9 +30,8 @@ class PlayerWallet {
   // @TODO: better estimation
   async reserveGas({ limit = 400000, gasPrice = null }) {
     if (gasPrice === null) {
-      gasPrice = this.provider.getGasPrice().then(price => { 
-        let convertedPrice = parseInt(utils.formatUnits(price, "wei"));
-        return convertedPrice;
+      this.provider.getGasPrice().then(price => { 
+        gasPrice = parseInt(utils.formatUnits(price, "wei"));
       })
     }
     const gasEstimate = BigNumber.from(limit);

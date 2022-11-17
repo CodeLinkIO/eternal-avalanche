@@ -47,6 +47,7 @@ class Sockets {
           this.acceptCharacter(characterId, socket, playerAddress);
         } catch (err) {
           console.log('delegate authorization failed', socket.id);
+          console.log(err.message)
           Sentry.withScope(scope => {
             scope.setExtras({ characterId, signature, msg });
             Sentry.captureException(err);

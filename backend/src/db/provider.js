@@ -40,7 +40,6 @@ const setupAuthorization = async ({ DungeonAdmin }) => {
     if (oldMnemonic) {
       const oldWallet = BackendWallet.fromMnemonic(oldMnemonic).connect(provider);
       console.log('changing backend wallet from ' + backendAddress);
-      console.log(oldWallet)
       const tx = await new ethers.Contract(
         DungeonAdmin.address,
         DungeonAdmin.interface, //Was .interface.abi, but there was no abi key. This wasn't a problem before.

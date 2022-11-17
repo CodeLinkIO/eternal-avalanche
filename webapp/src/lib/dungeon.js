@@ -81,9 +81,9 @@ class Dungeon {
       delegateWallet: this.delegateWallet,
     });
 
-    const gasPrice = this.provider.getGasPrice().then(price => { 
-      let convertedPrice = parseInt(utils.formatUnits(price, "wei"));
-      return convertedPrice;
+    let gasPrice = 0;
+    this.provider.getGasPrice().then(price => { 
+      gasPrice = parseInt(ethers.utils.formatUnits(price, "wei"));
     })
     this.defaultOpts = {
       gas: 4000000,

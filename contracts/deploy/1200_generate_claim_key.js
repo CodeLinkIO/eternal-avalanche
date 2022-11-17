@@ -6,7 +6,7 @@ require('dotenv').config()
 
 module.exports = async ({network, getChainId, getNamedAccounts, deployments}) => {
   const provider = new providers.JsonRpcProvider(process.env.PROVIDER_ENDPOINT);
-  const gasPrice = provider.getGasPrice().then(price => { return utils.formatUnits(price, "wei"); })
+  const gasPrice = provider.getGasPrice().then(price => { return parseInt(utils.formatUnits(price, "wei")); })
   const {execute, deployIfDifferent, log} = deployments;
   const chainId = process.env.CHAIN_ID; //await getChainId(); //Old method replaced with env.
   const config = webappConfig(chainId); // TODO contract expose min balance / price
